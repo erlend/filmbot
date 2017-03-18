@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"
+    meta name="turbolinks-cache-control" content="no-cache"
+
+    title FilmBot
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+    = yield(:head) if content_for?(:head)
+
+  body
+
+    .jumbotron.jumbotron-fluid: .container = yield
+
+    - if current_user
+      footer.fixed-bottom: ul.nav.justify-content-center
+        = nav_link_to t(:sign_out), session_path, method: :delete

@@ -1,0 +1,124 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.themoviedb.org/3/find/tt0451279?api_key=<%= ENV['THEMOVIEDB_API_KEY']
+      %>&external_source=imdb_id
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.1 (darwin16.4.0 x86_64) ruby/2.3.3p222
+      Host:
+      - api.themoviedb.org
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=21600
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Mon, 13 Mar 2017 01:23:45 GMT
+      Etag:
+      - '"012d0a197ad5eb057388f085b46414e0"'
+      Server:
+      - openresty
+      Status:
+      - 200 OK
+      X-Memc:
+      - HIT
+      X-Memc-Age:
+      - '17268'
+      X-Memc-Expires:
+      - '4332'
+      X-Memc-Key:
+      - e2f0cfd53a227ab35a171088a25afe4b
+      X-Ratelimit-Limit:
+      - '40'
+      X-Ratelimit-Remaining:
+      - '39'
+      X-Ratelimit-Reset:
+      - '1489368234'
+      Content-Length:
+      - '545'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"movie_results":[{"adult":false,"backdrop_path":"/iV6w99lpgEO23S8f80wCKLt1eCq.jpg","genre_ids":[28,12,14,10752],"id":297762,"original_language":"en","original_title":"Wonder
+        Woman","overview":"An Amazon princess comes to the world of Man to become
+        the greatest of the female superheroes.","release_date":"2017-06-01","poster_path":"/2Pq1CoqB8aF4XHI5DDqqABA94Rt.jpg","popularity":3.384339,"title":"Wonder
+        Woman","video":false,"vote_average":0.0,"vote_count":8}],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]}'
+    http_version: 
+  recorded_at: Mon, 13 Mar 2017 01:23:45 GMT
+- request:
+    method: get
+    uri: https://api.themoviedb.org/3/find/tt0451279?api_key=<THEMOVIEDB_API_KEY>&external_source=imdb_id
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.1 (darwin16.4.0 x86_64) ruby/2.3.3p222
+      Host:
+      - api.themoviedb.org
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=21600
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 17 Mar 2017 17:45:09 GMT
+      Etag:
+      - '"f2e4276990795c037cd627f9d7affc91"'
+      Server:
+      - openresty
+      Status:
+      - 200 OK
+      X-Memc:
+      - HIT
+      X-Memc-Age:
+      - '8739'
+      X-Memc-Expires:
+      - '12861'
+      X-Memc-Key:
+      - e2f0cfd53a227ab35a171088a25afe4b
+      X-Ratelimit-Limit:
+      - '40'
+      X-Ratelimit-Remaining:
+      - '36'
+      X-Ratelimit-Reset:
+      - '1489772717'
+      Content-Length:
+      - '545'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"movie_results":[{"adult":false,"backdrop_path":"/iV6w99lpgEO23S8f80wCKLt1eCq.jpg","genre_ids":[28,12,14,10752],"id":297762,"original_language":"en","original_title":"Wonder
+        Woman","overview":"An Amazon princess comes to the world of Man to become
+        the greatest of the female superheroes.","release_date":"2017-06-01","poster_path":"/2Pq1CoqB8aF4XHI5DDqqABA94Rt.jpg","popularity":3.044521,"title":"Wonder
+        Woman","video":false,"vote_average":0.0,"vote_count":8}],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]}'
+    http_version: 
+  recorded_at: Fri, 17 Mar 2017 17:45:09 GMT
+recorded_with: VCR 3.0.3
