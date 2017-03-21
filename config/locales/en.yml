@@ -21,6 +21,13 @@
 
 en:
   logout: 'Sign Out'
+  config: 'Config'
+  configs:
+    show:
+      configured_with: "Configured to use the user %{bot} as bot"
+      unconfigured: "Not yet configured with a bot"
+      want_to_become_bot: "Do you wish to make the current user as bot?"
+      become_bot: "Make %{user} the bot"
   raffles:
     show:
       description: "The movie was randomly selected from %{url}. Want another?"

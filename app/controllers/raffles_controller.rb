@@ -2,6 +2,7 @@ class RafflesController < ApplicationController
 
   def show
     @card = random_card(current_user.pending_movies).pick
+    redirect_to config_path unless @card
   end
 
   def equal

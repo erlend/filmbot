@@ -19,4 +19,5 @@ html
 
     - if current_user
       footer.fixed-bottom: ul.nav.justify-content-center
+        = nav_link_to t(:config),   config_path
         = nav_link_to t(:sign_out), session_path, method: :delete

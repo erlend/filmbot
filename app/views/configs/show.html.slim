@@ -1,0 +1,14 @@
+h1.display-3 = t :config
+
+p.lead
+  - if @bot
+    == t '.configured_with', bot: content_tag(:strong, @bot.name)
+  - else
+    = t '.unconfigured'
+
+hr.my-4
+p = t '.want_to_become_bot'
+
+p.lead
+  = link_to config_path, class: 'btn btn-primary btn-lg', method: :patch do
+    = t '.become_bot', user: current_user.name

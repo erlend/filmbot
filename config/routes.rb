@@ -4,7 +4,12 @@ Rails.application.routes.draw do
   get 'auth/:provider/callback', to: 'sessions#create'
   delete 'auth',                 to: 'sessions#destroy', as: :session
 
-  constraints(-> (req) { req.session[:user_id]}) do
+  get  'webhook', to: WebhooksController.action(:show)
+  post 'webhook', to: WebhooksController.action(:create)
+
+  constraints(-> (req) { req.session[:user_id] }) do
+    resource :config, only: [:show, :update]
+
     resource :raffle, path: '', only: :show do
       get 'equal'
     end

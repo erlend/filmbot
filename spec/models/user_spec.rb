@@ -35,7 +35,7 @@ RSpec.describe User, type: :model do
     subject { described_class.bot }
 
     context 'when bot exists' do
-      let!(:bot) { create :user, :bot }
+      let!(:bot) { create :user, webhook_id: 'foo' }
 
       it { is_expected.to eq bot }
     end
@@ -43,6 +43,10 @@ RSpec.describe User, type: :model do
     context 'when bot does not exist' do
       it { is_expected.to be nil }
     end
+  end
+
+  describe '.moviefy_cards' do
+
   end
 
 end

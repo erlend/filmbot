@@ -10,22 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170312094904) do
+ActiveRecord::Schema.define(version: 20170321190552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "received_webhooks", force: :cascade do |t|
+    t.string   "webhook_id", limit: 25
+    t.string   "type"
+    t.json     "data"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["webhook_id"], name: "index_received_webhooks_on_webhook_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string   "uid",                          null: false
-    t.string   "provider",                     null: false
-    t.string   "name",                         null: false
+    t.string   "uid",                     null: false
+    t.string   "provider",                null: false
+    t.string   "name",                    null: false
     t.string   "oauth_token"
     t.string   "oauth_secret"
-    t.boolean  "bot",          default: false, null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "webhook_id",   limit: 24
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true, using: :btree
-    t.index ["provider"], name: "index_users_on_provider", where: "bot", using: :btree
+    t.index ["webhook_id"], name: "index_users_on_webhook_id", unique: true, using: :btree
   end
 
 end

@@ -38,12 +38,6 @@ gem 'ruby-trello', '~> 2.0.0', require: 'trello'
 # Use Pickup to pick a movie by it's votes
 gem 'pickup'
 
-# Use SuckerPunch for background jobs (note: restrict version due to problems
-# with DelayedCron 0.2.9).
-gem 'sucker_punch', '< 2'
-# Use DelayedCron for cron jobs with SuckerPunch
-gem 'delayed_cron', '~> 0.2.9'
-
 group :development, :test do
   # Use RSpec as test suite
   gem 'rspec-rails', '~> 3.5'

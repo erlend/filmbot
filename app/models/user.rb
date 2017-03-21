@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  has_many :activities, foreign_key: 'owner_id'
-  cron_job :moviefy_cards, interval: 1.hour
 
   ##
   # Find or create user from +OmniAuth+ auth hash, then update the user's name
@@ -23,7 +21,7 @@ class User < ActiveRecord::Base
   # background jobs to run.
   #
   def self.bot
-    find_by(bot: true, provider: 'trello')
+    where.not(webhook_id: nil).first
   end
 
   ##
@@ -32,18 +30,7 @@ class User < ActiveRecord::Base
   #
   def self.moviefy_cards
     bot.pending_movies.reject(&:cover_image_id).each do |card|
-      message = "\"#{card.id}\" - #{card.name}"
-      begin
-        url = card.attachments.map(&:url).find { |i| i.include?('imdb.com/') }
-        imdb_id = url[/\/{2}[^\/]+\.imdb\.com\/[^\/]+\/([^\/\?]+)/, 1]
-
-        movie = Movie.find(imdb_id)
-
-        card.add_attachment movie.backdrop_url
-        logger.info "Added cover image to card #{message}"
-      rescue NoMethodError
-        logger.warn "Could not find valid IMDB URL on card #{message}"
-      end
+      add_backdrop_to_card(card)
     end
   end
 
@@ -53,6 +40,58 @@ class User < ActiveRecord::Base
   def pending_movies
     path = "/lists/#{ENV.fetch('TRELLO_PENDING_LIST_ID')}/cards"
     trello.find_many Trello::Card, path
+  end
+
+  ##
+  # Find card by +card_id+
+  #
+  def find_card(card_id)
+    trello.find(:card, card_id)
+  end
+
+  ##
+  # Add backdrop to card if the card has a valid IMDB url attached
+  #
+  def add_backdrop_to_card(card, url = nil)
+    card = trello.find(:card, card) if card.is_a?(String)
+    message = "\"#{card.id}\" - #{card.name}"
+    return if card.cover_image_id
+
+    begin
+      url ||= card.attachments.map(&:url).find { |i| i.include?('imdb.com/') }
+      imdb_id = url[/\/{2}[^\/]+\.imdb\.com\/[^\/]+\/([^\/\?]+)/, 1]
+
+      movie = Movie.find(imdb_id)
+
+      card.add_attachment movie.backdrop_url
+      logger.info "Added cover image to card #{message}"
+    rescue NoMethodError
+      logger.warn "Could not find valid IMDB URL on card #{message}"
+    end
+  end
+
+  ##
+  # Find webhook from the user's +webhook_id+ or return nil if it is missing
+  #
+  def webhook
+    return unless webhook_id
+    @webhook ||= Trello::Webhook.find webhook_id
+  end
+
+  ##
+  # Create webhook and set the user's +webhook_id+.
+  #
+  def create_webhook(options)
+    trello.create(:webhook, options).tap do |webhook|
+      update!(webhook_id: webhook.id)
+    end
+  end
+
+  ##
+  # Finds +Trello::Member+ for this user
+  #
+  def member
+    @member ||= trello.find(:member, :me)
   end
 
   private
