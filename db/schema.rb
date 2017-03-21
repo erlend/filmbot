@@ -10,16 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170312170506) do
+ActiveRecord::Schema.define(version: 20170312094904) do
 
-  create_table "activities", force: :cascade do |t|
-    t.string   "key"
-    t.string   "target"
-    t.integer  "owner_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["owner_id"], name: "index_activities_on_owner_id"
-  end
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "users", force: :cascade do |t|
     t.string   "uid",                          null: false
@@ -30,8 +24,8 @@ ActiveRecord::Schema.define(version: 20170312170506) do
     t.boolean  "bot",          default: false, null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
-    t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
-    t.index ["provider"], name: "index_users_on_provider", where: "bot"
+    t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true, using: :btree
+    t.index ["provider"], name: "index_users_on_provider", where: "bot", using: :btree
   end
 
 end
