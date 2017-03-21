@@ -38,6 +38,9 @@ gem 'ruby-trello', '~> 2.0.0', require: 'trello'
 # Use Pickup to pick a movie by it's votes
 gem 'pickup'
 
+# Use Sentry for error tracking
+gem 'sentry-raven'
+
 group :development, :test do
   # Use RSpec as test suite
   gem 'rspec-rails', '~> 3.5'
