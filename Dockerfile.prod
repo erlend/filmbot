@@ -1,0 +1,21 @@
+FROM ruby:2.3-alpine
+
+ENV RAILS_LOG_TO_STDOUT enabled
+ENV RAILS_SERVE_STATIC_FILES enabled
+ENV RAILS_ENV production
+ENV RACK_ENV production
+
+EXPOSE 3000
+
+WORKDIR /app
+COPY . ./
+
+RUN apk add -U nodejs alpine-sdk postgresql-dev postgresql-libs tzdata && \
+    bundle install --deployment --without="development test" && \
+    bin/rake assets:precompile && \
+    apk del alpine-sdk postgresql-dev && \
+    adduser -D app && \
+    rm -rf /var/tmp/*/ /tmp/*/ /var/cache/apk/*
+
+USER app
+CMD bundle exec puma -C config/puma.rb
