@@ -59,7 +59,6 @@ class User < ActiveRecord::Base
     imdb_id = url[/\/{2}[^\/]+\.imdb\.com\/[^\/]+\/([^\/\?]+)/, 1] if url
 
     unless imdb_id
-      debugger
       logger.warn "Could not find valid IMDB URL on card #{message}"
       return
     end
