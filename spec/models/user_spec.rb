@@ -41,6 +41,8 @@ RSpec.describe User, type: :model do
     end
 
     context 'when bot does not exist' do
+      before { described_class.class_variable_set :@@bot, nil }
+
       it { is_expected.to be nil }
     end
   end

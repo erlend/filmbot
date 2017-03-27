@@ -10,7 +10,7 @@ class WebhooksController < ActionController::Metal
     case params[:action][:type].to_sym
     when :addAttachmentToCard
       data = params[:action][:data]
-      bot.add_backdrop_to_card(data[:card][:id], data[:attachment][:url])
+      bot.moviefy_card(data[:card][:id], data[:attachment][:url])
     else
       Rails.logger.debug "Unimplemented action type '#{params[:action][:type]}'"
     end

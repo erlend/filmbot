@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   # background jobs to run.
   #
   def self.bot
-    where.not(webhook_id: nil).first
+    @@bot ||= where.not(webhook_id: nil).first
   end
 
   ##
@@ -29,9 +29,7 @@ class User < ActiveRecord::Base
   # existing cover image).
   #
   def self.moviefy_cards
-    bot.pending_movies.reject(&:cover_image_id).each do |card|
-      add_backdrop_to_card(card)
-    end
+    bot.pending_movies.each { |card| bot.moviefy_card(card) }
   end
 
   ##
@@ -50,23 +48,30 @@ class User < ActiveRecord::Base
   end
 
   ##
-  # Add backdrop to card if the card has a valid IMDB url attached
+  # Add movie name, description, and, backdrop to card if the card has a valid
+  # IMDB url attached or provided with the +url+ parameter.
   #
-  def add_backdrop_to_card(card, url = nil)
+  def moviefy_card(card, url = nil)
     card = trello.find(:card, card) if card.is_a?(String)
     message = "\"#{card.id}\" - #{card.name}"
-    return if card.cover_image_id
 
-    begin
-      url ||= card.attachments.map(&:url).find { |i| i.include?('imdb.com/') }
-      imdb_id = url[/\/{2}[^\/]+\.imdb\.com\/[^\/]+\/([^\/\?]+)/, 1]
+    url ||= card.attachments.map(&:url).find { |i| i.include?('imdb.com/') }
+    imdb_id = url[/\/{2}[^\/]+\.imdb\.com\/[^\/]+\/([^\/\?]+)/, 1] if url
 
-      movie = Movie.find(imdb_id)
-
-      card.add_attachment movie.backdrop_url
-      logger.info "Added cover image to card #{message}"
-    rescue NoMethodError
+    unless imdb_id
+      debugger
       logger.warn "Could not find valid IMDB URL on card #{message}"
+      return
+    end
+
+    movie = Movie.find(imdb_id)
+    card.add_attachment(movie.backdrop_url) unless card.cover_image_id
+    card.name = movie.title
+    card.desc = movie.overview
+    if card.save
+      logger.info "Added movie info to card #{message}"
+    else
+      logger.warn "Could not save movie info to card #{message}"
     end
   end
 

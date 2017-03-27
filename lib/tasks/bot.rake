@@ -12,10 +12,7 @@ namespace :bot do
 
   desc 'Add backdrop image to the cards of pending movies'
   task moviefy: :environment do
-    user = User.bot
-    user.pending_movies.reject(&:cover_image_id).each do |card|
-      user.add_backdrop_to_card(card)
-    end
+    User.moviefy_cards
   end
 
 end
