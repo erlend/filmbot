@@ -1,4 +1,5 @@
 class CommandsController < ApplicationController
+  skip_before_action :verify_authenticity_token
 
   def create
     return render json: {}, status: 403 unless valid_slack_token?
