@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   get  'webhook', to: WebhooksController.action(:show)
   post 'webhook', to: WebhooksController.action(:create)
-  post 'command', to: CommandsController.action(:create)
+  post 'command', to: 'commands#create'
 
   constraints(-> (req) { req.session[:user_id] }) do
     resource :config, only: [:show, :update]

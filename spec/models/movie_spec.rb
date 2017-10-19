@@ -17,6 +17,12 @@ RSpec.describe Movie, type: :model, vcr: { cassette_name: 'with_movie' } do
     end
   end
 
+  describe '.all_genres', vcr: { cassette_name: 'genres' } do
+    subject { described_class.all_genres }
+
+    it { is_expected.to include(28 => 'Action') }
+  end
+
   describe '#backdrop_url' do
     subject { movie.backdrop_url }
 
@@ -27,6 +33,12 @@ RSpec.describe Movie, type: :model, vcr: { cassette_name: 'with_movie' } do
     subject { movie.poster_url }
 
     it { is_expected.to eq 'https://image.tmdb.org/t/p/w500/2Pq1CoqB8aF4XHI5DDqqABA94Rt.jpg' }
+  end
+
+  describe '#genres' do
+    subject { movie.genres }
+
+    it { is_expected.to match_array %w[Action Adventure Fantasy War] }
   end
 
 end
