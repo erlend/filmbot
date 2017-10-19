@@ -60,11 +60,11 @@ class Movie
     [image_site, poster_path].join
   end
 
-  def desc
-    overview
-  end
-
   def method_missing(meth)
+    case meth
+    when :name then return title
+    when :desc then return overview
+    end
     @attributes[meth]
   end
 
