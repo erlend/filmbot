@@ -43,6 +43,9 @@ gem 'pickup'
 # Use Sentry for error tracking
 gem 'sentry-raven'
 
+# Use SuckerPunch for background jobs
+gem 'sucker_punch', '~> 2.0'
+
 group :development, :test do
   # Use RSpec as test suite
   gem 'rspec-rails', '~> 3.5'

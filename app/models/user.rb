@@ -41,6 +41,17 @@ class User < ActiveRecord::Base
   end
 
   ##
+  # Find a random movie. If weighted param is `true` (the default) then movies
+  # get prioritized by the number of votes they have.
+  #
+  def random_movie(weighted=true)
+    return pending_movies.sample unless weighted
+    key = Proc.new{ |card| card }
+    weight = Proc.new{ |card| card.badges['votes'] }
+    Pickup.new(pending_movies, key_func: key, weight_func: weight).pick
+  end
+
+  ##
   # Find card by +card_id+
   #
   def find_card(card_id)
@@ -56,14 +67,13 @@ class User < ActiveRecord::Base
     message = "\"#{card.id}\" - #{card.name}"
 
     url ||= card.attachments.map(&:url).find { |i| i.include?('imdb.com/') }
-    imdb_id = url[/\/{2}[^\/]+\.imdb\.com\/[^\/]+\/([^\/\?]+)/, 1] if url
+    movie = Movie.find_from_url(url)
 
-    unless imdb_id
+    unless movie
       logger.warn "Could not find valid IMDB URL on card #{message}"
       return
     end
 
-    movie = Movie.find(imdb_id)
     card.add_attachment(movie.backdrop_url) unless card.cover_image_id
     card.name = movie.title
     card.desc = movie.overview

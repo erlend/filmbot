@@ -31,6 +31,17 @@ class Movie
     end
   end
 
+  ##
+  # Parse url and call +Movie.find+ if valid id and source is detected
+  #
+  def self.find_from_url(url)
+    if movie_id = url[/\/{2}[^\/]+\.imdb\.com\/[^\/]+\/([^\/\?]+)/, 1]
+      source = 'imdb_id'
+    else return
+    end
+    find movie_id, source
+  end
+
   def initialize(attributes = {})
     @attributes = attributes.with_indifferent_access
   end
@@ -47,6 +58,10 @@ class Movie
   #
   def poster_url
     [image_site, poster_path].join
+  end
+
+  def desc
+    overview
   end
 
   def method_missing(meth)
