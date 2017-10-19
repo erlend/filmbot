@@ -2,6 +2,8 @@
 # Get information about a movie from TheMovieDB.
 #
 class Movie
+  @@genres = nil
+
   ##
   # Parameters injected into each request.
   #
@@ -13,6 +15,16 @@ class Movie
 
   def self.site
     RestClient::Resource.new('https://api.themoviedb.org/3')
+  end
+
+  def self.all_genres
+    return @@genres if @@genres
+    response = site["genre/movie/list"].get params: default_params
+
+    case response.code
+    when 200
+      return @@genres = JSON.parse(response.body)['genres'].map(&:values).to_h
+    end
   end
 
   ##
@@ -58,6 +70,11 @@ class Movie
   #
   def poster_url
     [image_site, poster_path].join
+  end
+
+
+  def genres
+    self.class.all_genres.values_at(*genre_ids)
   end
 
   def method_missing(meth)
