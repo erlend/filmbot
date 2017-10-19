@@ -31,13 +31,13 @@ class CommandJob < ApplicationJob
             value: movie.vote_average,
             short: true
           }, {
-            title: 'Suggester',
+            title: 'Added by',
             value: author.full_name.split(' ').first,
             short: true
           }, {
             title: 'Genres',
             value: movie.genres.to_sentence,
-            short: false
+            short: true
           }
         ]
       }]
