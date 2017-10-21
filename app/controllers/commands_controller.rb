@@ -4,8 +4,7 @@ class CommandsController < ApplicationController
   def create
     return render json: {}, status: 403 unless valid_slack_token?
     CommandJob.perform_later command_params.to_h
-    # response type 'ephemeral' if not replying in channel
-    render json: { response_type: 'in_channel' }, status: :created
+    render json: { response_type: response_type }, status: :created
   end
 
   private
@@ -16,6 +15,11 @@ class CommandsController < ApplicationController
 
   def valid_slack_token?
     params[:token] == ENV.fetch('SLACK_SLASH_COMMAND_TOKEN')
+  end
+
+  def response_type
+    params[:text].to_s.strip.split(' ').include?('private') &&
+      'ephemeral' || 'in_channel'
   end
 
 end

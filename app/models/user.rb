@@ -1,27 +1,11 @@
-class User < ActiveRecord::Base
+class User
+  include Singleton
 
   ##
-  # Find or create user from +OmniAuth+ auth hash, then update the user's name
-  # and credentials.
-  #
-  def self.from_omniauth(auth)
-    return unless auth.is_a?(Hash)
-    find_or_initialize_by(provider: auth.provider, uid: auth.uid).tap do |user|
-      user.name = auth.info.name
-      if auth.credentials?
-        user.oauth_token  = auth.credentials.token
-        user.oauth_secret = auth.credentials.secret
-      end
-      user.save
-    end
-  end
-
-  ##
-  # Find first user marked as bot. This user must be present in order for
-  # background jobs to run.
+  # For handling legacy calls
   #
   def self.bot
-    @@bot ||= where.not(webhook_id: nil).first
+    instance
   end
 
   ##
@@ -113,8 +97,8 @@ class User < ActiveRecord::Base
   def trello
     Trello::Client.new(consumer_key: ENV.fetch('TRELLO_CONSUMER_KEY'),
                        consumer_secret: ENV.fetch('TRELLO_CONSUMER_SECRET'),
-                       oauth_token: oauth_token,
-                       oauth_secret: oauth_secret)
+                       oauth_token: ENV.fetch('TRELLO_OAUTH_TOKEN'),
+                       oauth_secret: ENV.fetch('TRELLO_OAUTH_SECRET'))
   end
 
 end

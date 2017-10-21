@@ -5,8 +5,8 @@ VCR.configure do |config|
   config.configure_rspec_metadata!
   config.filter_sensitive_data('<TRELLO_CONSUMER_KEY>') { ENV['TRELLO_CONSUMER_KEY'] }
   config.filter_sensitive_data('<TRELLO_CONSUMER_SECRET>') { ENV['TRELLO_CONSUMER_SECRET'] }
-  config.filter_sensitive_data('<TRELLO_DEVELOPER_KEY>') { ENV['TRELLO_DEVELOPER_KEY'] }
-  config.filter_sensitive_data('<TRELLO_DEVELOPER_SECRET>') { ENV['TRELLO_DEVELOPER_SECRET'] }
+  config.filter_sensitive_data('<TRELLO_OAUTH_TOKEN>') { ENV['TRELLO_OAUTH_TOKEN'] }
+  config.filter_sensitive_data('<TRELLO_OAUTH_SECRET>') { ENV['TRELLO_OAUTH_SECRET'] }
   config.filter_sensitive_data('<TRELLO_PENDING_LIST_ID>') { ENV['TRELLO_PENDING_LIST_ID'] }
   config.filter_sensitive_data('<THEMOVIEDB_API_KEY>') { ENV['THEMOVIEDB_API_KEY'] }
 end

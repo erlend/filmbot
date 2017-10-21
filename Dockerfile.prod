@@ -3,17 +3,16 @@ FROM ruby:2.3-alpine
 ENV RAILS_LOG_TO_STDOUT enabled
 ENV RAILS_SERVE_STATIC_FILES enabled
 ENV RAILS_ENV production
-ENV RACK_ENV production
 
 EXPOSE 3000
 
 WORKDIR /app
 COPY . ./
 
-RUN apk add -U nodejs alpine-sdk postgresql-dev postgresql-libs tzdata && \
+RUN build_deps="alpine-sdk" && \
+    apk add -U $build_deps tzdata && \
     bundle install --deployment --without="development test" && \
-    bin/rake assets:precompile && \
-    apk del alpine-sdk postgresql-dev && \
+    apk del $build_deps && \
     adduser -D app && \
     rm -rf /var/tmp/*/ /tmp/*/ /var/cache/apk/*
 
