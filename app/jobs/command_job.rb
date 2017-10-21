@@ -20,12 +20,16 @@ class CommandJob < ApplicationJob
         image_url: movie.try(:poster_url),
         fields: [
           {
-            title: 'Votes',
-            value: card.voters.count,
+            title: 'Rating',
+            value: movie.vote_average,
             short: true
           }, {
-            title: 'IMDb',
-            value: movie.vote_average,
+            title: 'Release date',
+            value: movie.release_date,
+            short: true
+          }, {
+            title: 'Votes',
+            value: card.voters.count,
             short: true
           }, {
             title: 'Added by',
@@ -34,7 +38,7 @@ class CommandJob < ApplicationJob
           }, {
             title: 'Genres',
             value: movie.genres.to_sentence,
-            short: true
+            short: false
           }
         ]
       }]
