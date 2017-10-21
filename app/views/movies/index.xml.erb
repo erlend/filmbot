@@ -3,7 +3,7 @@
   <channel>
     <title>Filmbot's pending movies</title>
     <link><%= request.url %></link>
-    <pubDate></pubDate>
+    <pubDate><%= @movies.first.last_activity_date %></pubDate>
 
     <% @movies.each do |movie| %>
       <% cache movie do %>
