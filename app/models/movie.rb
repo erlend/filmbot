@@ -44,6 +44,15 @@ class Movie
   end
 
   ##
+  # Call +self.find+ and cache the response
+  #
+  def self.find_cached(id, source = 'imdb_id')
+    Rails.cache.fetch("movie:#{source}:#{id}", expires_in: 90.minutes) do
+      find id, source
+    end
+  end
+
+  ##
   # Parse url and call +Movie.find+ if valid id and source is detected
   #
   def self.find_from_url(url)
@@ -51,7 +60,15 @@ class Movie
       source = 'imdb_id'
     else return
     end
-    find movie_id, source
+    find_cached movie_id, source
+  end
+
+  ##
+  # Find url on movie sites and call find_from_url with it
+  #
+  def self.find_from_card(card)
+    url = card.attachments.map(&:url).find { |i| i.include?('imdb.com') }
+    find_from_url url if url
   end
 
   def initialize(attributes = {})
@@ -72,7 +89,9 @@ class Movie
     [image_site, poster_path].join
   end
 
-
+  ##
+  # Array of genres
+  #
   def genres
     self.class.all_genres.values_at(*genre_ids)
   end

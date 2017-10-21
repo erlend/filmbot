@@ -17,6 +17,15 @@ RSpec.describe Movie, type: :model, vcr: { cassette_name: 'with_movie' } do
     end
   end
 
+  describe '.find_cached' do
+    let(:movie_double) { double 'movie' }
+
+    it 'caches response' do
+      expect(Movie).to receive(:find).at_most(:once) { movie_double }
+      2.times { Movie.find_cached 1 }
+    end
+  end
+
   describe '.all_genres', vcr: { cassette_name: 'genres' } do
     subject { described_class.all_genres }
 

@@ -13,7 +13,7 @@ class User
   # existing cover image).
   #
   def self.moviefy_cards
-    bot.pending_movies.each { |card| bot.moviefy_card(card) }
+    bot.pending_movies_cached.each { |card| bot.moviefy_card(card) }
   end
 
   ##
@@ -24,15 +24,20 @@ class User
     trello.find_many Trello::Card, path
   end
 
+  def pending_movies_cached
+    Rails.cache.fetch('trello:pending_movies') { pending_movies }
+  end
+
   ##
   # Find a random movie. If weighted param is `true` (the default) then movies
   # get prioritized by the number of votes they have.
   #
   def random_movie(weighted=true)
-    return pending_movies.sample unless weighted
-    key = Proc.new{ |card| card }
-    weight = Proc.new{ |card| card.badges['votes'] }
-    Pickup.new(pending_movies, key_func: key, weight_func: weight).pick
+    movies = pending_movies_cached
+    return movies.sample unless weighted
+    key_func = Proc.new{ |card| card }
+    weight_func = Proc.new{ |card| card.badges['votes'] }
+    Pickup.new(movies, key_func: key_func, weight_func: weight_func).pick
   end
 
   ##
@@ -89,7 +94,7 @@ class User
   # Finds +Trello::Member+ for this user
   #
   def member
-    @member ||= trello.find(:member, :me)
+    @member ||= Rails.cache.fetch('trello:me') { trello.find(:member, :me) }
   end
 
   private

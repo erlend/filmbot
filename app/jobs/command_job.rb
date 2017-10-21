@@ -6,7 +6,6 @@ class CommandJob < ApplicationJob
     card = User.bot.random_movie(!text.include?('simple'))
     url = card.attachments.map(&:url).find { |i| i.include?('imdb.com/') }
     movie = Movie.find_from_url(url) || card
-    # voters = card.voters.map { |voter| voter.full_name.split(' ').first }
     author = card.actions.last.member_creator
 
     message = {

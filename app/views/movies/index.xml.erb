@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>Filmbot's pending movies</title>
+    <link><%= request.url %></link>
+    <pubDate></pubDate>
+
+    <% @movies.each do |movie| %>
+      <% cache movie do %>
+        <item>
+          <pubDate><%= movie.last_activity_date %></pubDate>
+          <title><%= movie.name %></title>
+          <link><%= movie.attachments.map(&:url).find { |i| i.include? 'imdb.com' } %></link>
+          <guid><%= movie.url %></guid>
+          <description><%= movie.desc %></description>
+        </item>
+      <% end %>
+    <% end %>
+  </channel>
+</rss>

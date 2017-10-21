@@ -11,8 +11,8 @@ gem 'rails', '~> 5.0.2'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+# Use Redis for caching
+gem 'redis-rails'
 
 # Communicate with APIs using RestClient
 gem 'rest-client', '~> 2.0.0'
